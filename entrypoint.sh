@@ -137,7 +137,7 @@ for akenv in $network; do
   checkStdOutput=$(akamai edgeworkers status ${edgeworkersID} | grep $edgeworkersVersion | grep ${networkUp} | sed -n 1p)
   echo "checkStdOutput1: $checkStdOutput"
   stdString=$(echo $checkStdOutput | cut -d " " -f 4)
-  echo "stdString: $stdString"
+  echo "stdString1: $stdString"
   #status command has PRESUBMIT, PENDING, IN_PROGRESS, COMPLETE status
   while [ "$stdString" == "PRESUBMIT" -o "$stdString" == "PENDING" -o "$stdString" == "IN_PROGRESS" ]
     do
