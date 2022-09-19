@@ -1,0 +1,37 @@
+name: "Deploy Akamai Edgeworkers"
+description: "GitHub Action to edgerworkers via Akamai API's"
+author: jdmevo123
+inputs:
+  edgeworkersName:
+    description:  'Name of Edgeworker'
+    required: true
+  network:
+    description: 'Network you wish to activate'
+    required: true
+    default: 'staging'
+  groupid:
+    description: 'GroupID for new registrations'
+    required: true
+  resourceTierId:
+    description: 'resourceTierId for new registrations'
+    required: true
+  EDGERC:
+    description: 'EDGERC env var'
+    required: true
+  WORKER_DIR:
+    description: 'WORKER_DIR env var'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.edgeworkersName}}
+    - ${{ inputs.network }}
+    - ${{ inputs.groupid }}
+    - ${{ inputs.resourceTierId }}
+  env:
+    EDGERC: ${{ inputs.EDGERC }}
+    WORKER_DIR: ${{ inputs.WORKER_DIR }}
+branding:
+  color: orange
+  icon: cloud-lightning
