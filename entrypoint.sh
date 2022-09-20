@@ -4,7 +4,7 @@ set -o pipefail
 # Create /root/.edgerc file from env variable
 echo -e "${EDGERC}" > ~/.edgerc
 
-#  Set Variables
+#  Set Variables./
 edgeworkersName=$1
 network=$2
 groupid=$3
@@ -134,24 +134,29 @@ for akenv in $network; do
   sleep 60
   networkUp=$(echo $akenv | tr [a-z] [A-Z])
   echo "networkUp: $networkUp"
-  checkStdOutput=$(akamai edgeworkers status ${edgeworkersID} | grep $edgeworkersVersion | grep ${networkUp} | sed -n 1p)
+  checkStdOutput=$(akamai edgeworkers status ${edgeworkersID} --section edgeworkers --edgerc ~/.edgerc | grep $edgeworkersVersion | grep ${networkUp} | sed -n 1p)
   echo "checkStdOutput1: $checkStdOutput"
-  stdString=$(echo $checkStdOutput | cut -d " " -f 4)
+  stdString=$(echo $checkStdOutput | cut -d " " -f 10 | tr "'" "_")
   echo "stdString1: $stdString"
   #status command has PRESUBMIT, PENDING, IN_PROGRESS, COMPLETE status
-  while [ "$stdString" == "PRESUBMIT" -o "$stdString" == "PENDING" -o "$stdString" == "IN_PROGRESS" ]
+  while [ "$stdString" == "_PRESUBMIT_" -o "$stdString" == "_PENDING_" -o "$stdString" == "_IN_PROGRESS_" ]
     do
       sleep 60
-      checkStdOutput=$(akamai edgeworkers status ${edgeworkersID} | grep $edgeworkersVersion | grep ${networkUp} | sed -n 1p)
+      checkStdOutput=$(akamai edgeworkers status ${edgeworkersID} --section edgeworkers --edgerc ~/.edgerc | grep $edgeworkersVersion | grep ${networkUp} | sed -n 1p)
       echo "checkStdOutput2: $checkStdOutput"
-      stdString=$(echo $checkStdOutput | cut -d " " -f 4)
+      stdString=$(echo $checkStdOutput | cut -d " " -f 10 | tr "'" "_")
       echo "stdString2: $stdString"
     done
   echo "stdString3: $stdString"
-  if [ "$stdString" == "COMPLETE" ]; then
+  if [ "$stdString" == "_COMPLETE_" ]; then
     echo "Activation edgeworker  ${edgeworkersID} on $akenv network completed successfully!"
+    exitStatus=succeeded
   else
     echo "Activation edgeworker  ${edgeworkersID} on $akenv network got issue! Break loop!"
-    break
+    exitStatus=failed
+    exit 1
   fi
+  if [ "exitStatus" == "failed" ]; then
+    break
+  fi  
 done

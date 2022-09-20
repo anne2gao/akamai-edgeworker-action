@@ -7,7 +7,18 @@
 	"context": "..",
 
 	// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-	"dockerFile": "../Dockerfile"
+	"dockerFile": "../Dockerfile",
+    "remoteEnv": {
+      "EDGERC": "${localEnv:EDGERC}",
+      "GITHUB_WORKSPACE": "/root/src"
+    },
+
+    "mounts": [
+	 //"source=C:\\users\\anne.gao\\cds.page-count-ew-api\\src,target=/root/src,type=bind,consistency=cached"
+      "source=${localEnv:HOME}${localEnv:USERPROFILE}\\cds.page-count-ew-api\\src,target=/root/src,type=bind,consistency=cached"
+   ]
+ 
+
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
