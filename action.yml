@@ -26,9 +26,6 @@ inputs:
     required: true
   tokenfile:
     description: 'edgekv access token file depended on env'
-    required: true   
-  tokenfile:
-    description: 'edgekv access token file depended on env'
     required: true 
   bundleversion:
     description: 'bundle version using for activating a existing bundle version only in the action'
