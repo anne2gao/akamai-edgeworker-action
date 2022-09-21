@@ -126,7 +126,7 @@ if [ ! -z "$edgeworkersID" -a "$hasUploaded" == "no" ]; then
   fi
 fi
 
-if [ -z "edgeworkersVersion" ]; then
+if [ -z "$edgeworkersVersion" ]; then
   edgeworkersVersion=$(echo $(<$GITHUB_WORKSPACE/bundle.json) | jq '.["edgeworker-version"]' | tr -d '"')
 fi
 echo "Activating Edgeworker Version: ${edgeworkersVersion} on akamai ${network}..."
