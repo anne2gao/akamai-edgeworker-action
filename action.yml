@@ -36,7 +36,6 @@ runs:
     - ${{ inputs.groupid }}
     - ${{ inputs.resourceTierId }}
     - ${{ inputs.hasUploaded }}
-    - ${{ inputs.tokenfile }}
     - ${{ inputs.bundleversion }}
   env:
     EDGERC: ${{ inputs.EDGERC }}
