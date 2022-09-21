@@ -10,14 +10,12 @@ network=$2
 groupid=$3
 resourceTierId=$4
 hasUploaded=$5
-tokenfile=$6
-edgeworkersVersion=$7
+edgeworkersVersion=$6
 
 echo "edgeworkersName: $edgeworkersName"
 echo "network: $network"
 echo "groupid: $groupid"
 echo "hasUploaded: $hasUploaded"
-echo "tokenfile: $tokenfile"
 echo "edgeworkersVersion: $edgeworkersVersion"
 
 echo ${edgeworkersName}
@@ -49,9 +47,7 @@ bundleFile='bundle.json'
 edgekvJSFile='edgekv.js'
 edgekv_tokensJSFile='edgekv_tokens.js'
 utilitiesDir='utils'
-if [ -f $tokenfile ]; then
-  cp $tokenfile edgekv_tokens.js
-fi
+
 if [ -f $mainJSFile ] ; then 
   tarCommand=${tarCommand}" $mainJSFile"
 else

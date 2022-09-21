@@ -24,9 +24,6 @@ inputs:
   hasUploaded:
     description: 'Has edgeworkers code Uploaded env var. Value is yes or no'
     required: true
-  tokenfile:
-    description: 'edgekv access token file depended on env'
-    required: true 
   bundleversion:
     description: 'bundle version using for activating a existing bundle version only in the action'
     required: false      
