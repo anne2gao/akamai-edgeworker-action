@@ -6,7 +6,7 @@ LABEL "com.github.actions.icon"="cloud-lightning"
 LABEL "com.github.actions.color"="orange"
 
 LABEL version="0.1.0"
-LABEL repository="https://github.com/cantire-corp/akamai-edgeworker-action"
+LABEL repository="https://github.com/cantire-corp/cds.common.actions/tree/feature/akamai-edgeworker-action"
 LABEL homepage=""
 LABEL maintainer="Anne Gao <anne.gao@cantire.com>"
 

@@ -9,10 +9,16 @@ edgeworkersName=$1
 network=$2
 groupid=$3
 resourceTierId=$4
+hasUploaded=$5
+tokenfile=$6
+edgeworkersVersion=$7
 
-echo $edgeworkersName
-echo $network
-echo $groupid
+echo "edgeworkersName: $edgeworkersName"
+echo "network: $network"
+echo "groupid: $groupid"
+echo "hasUploaded: $hasUploaded"
+echo "tokenfile: $tokenfile"
+echo "edgeworkersVersion: $edgeworkersVersion"
 
 echo ${edgeworkersName}
 response=$(akamai edgeworkers list-ids --json edgeworkers.json --section edgeworkers --edgerc ~/.edgerc)
@@ -43,6 +49,9 @@ bundleFile='bundle.json'
 edgekvJSFile='edgekv.js'
 edgekv_tokensJSFile='edgekv_tokens.js'
 utilitiesDir='utils'
+if [ -f $tokenfile ]; then
+  cp $tokenfile edgekv_tokens.js
+fi
 if [ -f $mainJSFile ] ; then 
   tarCommand=${tarCommand}" $mainJSFile"
 else
@@ -75,6 +84,7 @@ then
   exit 1
 fi
 
+
 if [ -z "$edgeworkersID" ]; then
     edgeworkersgroupID=${groupid}
     # Register ID
@@ -92,30 +102,33 @@ if [ -z "$edgeworkersID" ]; then
       echo "Registration failed!!!! See above."
       exit 1
     fi
-
-    
+  
     echo ${edgeworkerList}
     echo "edgeworker registered!"
     edgeworkersID=$(echo ${edgeworkerList} | jq '.data[] | .edgeWorkerId')
     edgeworkersgroupID=$(echo ${edgeworkerList} | jq '.data[] | .groupId')
 fi
 
-echo "Uploading Edgeworker Version ... "
-#UPLOAD edgeWorker
-uploadreponse=$(akamai edgeworkers upload \
-  --edgerc ~/.edgerc \
-  --section edgeworkers \
-  --bundle ~/deploy.tgz \
-  ${edgeworkersID})
+if [ ! -z "$edgeworkersID" -a "$hasUploaded" == "no" ]; then
+  echo "Uploading Edgeworker Version ... "
+  #UPLOAD edgeWorker
+  uploadreponse=$(akamai edgeworkers upload \
+    --edgerc ~/.edgerc \
+    --section edgeworkers \
+    --bundle ~/deploy.tgz \
+    ${edgeworkersID})
 
-echo "Upload Response: ${uploadreponse}"
-#TODO: check if upload succeeded
-if [[ ! ${uploadreponse} =~ "New version uploaded" ]]; then
-  echo "upload failed!!!! See Upload Response above."
-  exit 950
+  echo "Upload Response: ${uploadreponse}"
+  #TODO: check if upload succeeded
+  if [[ ! ${uploadreponse} =~ "New version uploaded" ]]; then
+    echo "upload failed!!!! See Upload Response above."
+    exit 1
+  fi
 fi
 
-edgeworkersVersion=$(echo $(<$GITHUB_WORKSPACE/bundle.json) | jq '.["edgeworker-version"]' | tr -d '"')
+if [ -z "edgeworkersVersion" ]; then
+  edgeworkersVersion=$(echo $(<$GITHUB_WORKSPACE/bundle.json) | jq '.["edgeworker-version"]' | tr -d '"')
+fi
 echo "Activating Edgeworker Version: ${edgeworkersVersion} on akamai ${network}..."
 for akenv in $network; do
   activateStdOut=$(akamai edgeworkers activate \

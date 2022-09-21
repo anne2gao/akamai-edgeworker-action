@@ -21,6 +21,18 @@ inputs:
   WORKER_DIR:
     description: 'WORKER_DIR env var'
     required: true
+  hasUploaded:
+    description: 'Has edgeworkers code Uploaded env var. Value is yes or no'
+    required: true
+  tokenfile:
+    description: 'edgekv access token file depended on env'
+    required: true   
+  tokenfile:
+    description: 'edgekv access token file depended on env'
+    required: true 
+  bundleversion:
+    description: 'bundle version using for activating a existing bundle version only in the action'
+    required: false      
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -29,6 +41,9 @@ runs:
     - ${{ inputs.network }}
     - ${{ inputs.groupid }}
     - ${{ inputs.resourceTierId }}
+    - ${{ inputs.hasUploaded }}
+    - ${{ inputs.tokenfile }}
+    - ${{ inputs.bundleversion }}
   env:
     EDGERC: ${{ inputs.EDGERC }}
     WORKER_DIR: ${{ inputs.WORKER_DIR }}
