@@ -10,6 +10,7 @@
 	"dockerFile": "../Dockerfile",
     "remoteEnv": {
       "EDGERC": "${localEnv:EDGERC}",
+	  "EDGEKV_TOKENS": "${localEnv:EDGEKV_TOKENS}",
       "GITHUB_WORKSPACE": "/root/src"
     },
 

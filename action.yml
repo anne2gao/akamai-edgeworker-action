@@ -1,6 +1,6 @@
 name: "Deploy Akamai Edgeworkers"
 description: "GitHub Action to edgerworkers via Akamai API's"
-author: jdmevo123
+author: Anne Gao
 inputs:
   edgeworkersName:
     description:  'Name of Edgeworker'
@@ -18,6 +18,9 @@ inputs:
   EDGERC:
     description: 'EDGERC env var'
     required: true
+  EDGEKV_TOKENS:
+    description: 'EDGEKV_TOKENS env var'
+    required: true  
   WORKER_DIR:
     description: 'WORKER_DIR env var'
     required: true
@@ -39,6 +42,7 @@ runs:
     - ${{ inputs.bundleversion }}
   env:
     EDGERC: ${{ inputs.EDGERC }}
+    EDGEKV_TOKENS: ${{ inputs.EDGEKV_TOKENS }}
     WORKER_DIR: ${{ inputs.WORKER_DIR }}
 branding:
   color: orange

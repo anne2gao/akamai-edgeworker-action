@@ -22,7 +22,7 @@ echo ${edgeworkersName}
 response=$(akamai edgeworkers list-ids --json edgeworkers.json --section edgeworkers --edgerc ~/.edgerc)
 errorMessage=$(cat edgeworkers.json | grep "ERROR: Unable to retrieve Edgeworkers list")
 if [ ! -z "$errorMessage" ]; then
-  echo "Errro happened on get edgeworkers list: $errorMessage, Exit!!!"
+  echo "Error happened on get edgeworkers list: $errorMessage, Exit!!!"
   exit 1
 fi
 cat edgeworkers.json
@@ -39,6 +39,7 @@ if [ -n "${WORKER_DIR}" ]; then
 fi
 
 cd ${GITHUB_WORKSPACE}
+echo -e "${EDGEKV_TOKENS}" > edgekv_tokens.js
 
 tarCommand='tar -czvf ~/deploy.tgz'
 # check if needed files exist
