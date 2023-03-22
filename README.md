@@ -67,16 +67,52 @@ Place in a `.yml` file such as this one in your `.github/workflows` folder. [Ref
 steps:
     - uses: actions/checkout@v1
     - name: Deploy Edgeworkers
-      uses: jdmevo123/akamai-edgeworker-action@1.1
+      uses: anne2gao/akamai-edgeworker-action@1.1
       env:
         EDGERC: ${{ secrets.AKAMAI_EDGERC }}
+        EDGEKV_TOKENS: ${{ inputs.EDGEKV_TOKENS }}
         WORKER_DIR: workerdirname # Optional directory for worker code (relative)
       with:
-        edgeworkersName: ${{ github.event.repository.name }}
-        network: 'staging'
-        groupid: '12345' #Akamai GroupID used for registering new edgeworkers
+        - ${{ inputs.edgeworkersName}}
+        - ${{ inputs.network }}
+        - ${{ inputs.groupid }}
+        - ${{ inputs.resourceTierId }}
+        - ${{ inputs.hasUploaded }}
+        - ${{ inputs.bundleversion }}
 ```
 
-## License
+## input variables in yml files
+## `edgeworkersName`
+**Required**
+Edgeworker name
 
-This project is distributed under the [MIT license](LICENSE.md).
+## `network`
+**Required**
+Network:
+- staging
+- production
+- staging production
+
+## `resourceTierId`
+**Required** 
+Resource Tier ID for a edgeworker id. The availabl value is 200 or 100
+
+## `EDGERC`
+**Required** 
+Akamai edgeworkers api secret. Set it into app Github environment variable or in a file like my.secrets
+
+## `EDGEKV_TOKENS`
+**Required** 
+Akamai edgekv_tokens.js file put into app secret. Set it into Github environment variable or in a file like my.secrets
+
+## `WORKER_DIR`
+**Required** 
+Source code directory in the repository
+
+## `hasUploaded`
+**Required** 
+The value is yes or no. You set it to yes if you have uploaded bundle code to Akamai with current edgeworker-version in bundle.json; Otherwise You set it to no if your new version in the repo has not be uploaded yet, and the action will upload it for you and activating it to akamai network defined in network var.
+
+## `bundleversion`
+**Not Required** 
+The bundle version you want to active. If hasUploaded is yes, and the bundle code with edgeworker-version is existing but not in active status in Akamai, you can set the bundleversion such as 1.0.10 whcih you want to active. You can use it to activate a uploaded version only with setting hasUploaded=yes, in case you need to rollback to old version.
